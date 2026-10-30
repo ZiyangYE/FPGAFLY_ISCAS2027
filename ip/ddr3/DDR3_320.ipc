@@ -2,7 +2,7 @@
 ipc_version=4
 file=DDR3_320
 module=D3_320
-target_device=gw5ast138b-007
+target_device=gw5ast138c-003
 type=ddr3
 version=3.0
 

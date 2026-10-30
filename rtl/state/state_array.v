@@ -18,6 +18,7 @@ module state_array #(
     input wire fire_ready,
     output wire [12:0] fire_row,
     output wire [LANES-1:0] fire,
+    output wire fire_any,
     output wire dense_failed,
     input wire event_valid,
     output wire event_ready,
@@ -35,7 +36,9 @@ module state_array #(
     wire reset_releasing =  |queue_reset;
     wire [TILES-1:0] input_ready, output_valid;
     wire [TILES-1:0] tile_failed, tile_event_ready, tile_event_done, tile_event_failed;
-    wire [TILES*19-1:0] output_records;
+    wire [TILES*20-1:0] output_records;
+    wire [TILES-1:0] output_fired;
+    assign fire_any = |output_fired;
     assign dense_ready = phase == 1 && !rst && !reset_releasing && !dense_failed && (&input_ready);
     assign accept_dense = dense_valid && dense_ready;
     assign fire_valid = phase == 1 && !rst && !reset_releasing && (&output_valid);
@@ -116,20 +119,21 @@ module state_array #(
             );
 
             elastic_fifo #(
-                .WIDTH(19),
+                .WIDTH(20),
                 .AW(2)
             ) completions (
                 clk,
                 local_reset,
                 tile_fire_valid,
                 tile_fire_ready,
-                {tile_fire_row, tile_fires},
+                {|tile_fires, tile_fire_row, tile_fires},
                 output_valid[t],
                 fire_valid && fire_ready,
-                output_records[t*19+:19]
+                output_records[t*20+:20]
             );
 
-            assign fire[t*6+:6] = output_records[t*19+:6];
+            assign fire[t*6+:6] = output_records[t*20+:6];
+            assign output_fired[t] = output_records[t*20+19];
             assign input_selected[t] = event_lane >= t * 6 && event_lane < t * 6 + 6;
             localparam FIRST_LANE = t * 6;
             wire [6:0] lane_difference = event_lane - FIRST_LANE[6:0];
@@ -168,7 +172,7 @@ module state_array #(
 
             // synthesis translate_off
             always @(negedge clk)
-                if (!rst && fire_valid && output_records[t*19+6+:13] !== fire_row)
+                if (!rst && fire_valid && output_records[t*20+6+:13] !== fire_row)
                     $fatal(1, "Tile completion rows diverged");
             // synthesis translate_on
         end
@@ -179,6 +183,8 @@ module state_array #(
     integer idle_cycles = 0;
 
     always @(posedge clk) begin
+        if (!rst && fire_valid && fire_any !== (|fire))
+            $fatal(1, "Tile completion fire summary diverged");
         if (rst || phase == 0 || (!dense_valid && !event_valid) ||
             accept_dense || (fire_valid && fire_ready) || event_done)
             idle_cycles <= 0;

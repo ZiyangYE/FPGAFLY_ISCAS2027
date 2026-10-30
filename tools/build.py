@@ -299,7 +299,7 @@ def main():
     script.parent.mkdir(parents=True, exist_ok=True)
     lines = [
         f'create_project -name {args.name} -dir {{{(ROOT / "build").as_posix()}}} '
-        "-pn GW5AST-LV138FPG676AC1/I0 -device_version B",
+        "-pn GW5AST-LV138FPG676AC1/I0 -device_version C",
         *[f"add_file -type verilog {{{path.as_posix()}}}" for path in sources],
         *[f"add_file -type {path.suffix[1:]} {{{path.as_posix()}}}" for path in constraints],
         f'set_option -include_path {{{(ROOT / "rtl").as_posix()}}}',

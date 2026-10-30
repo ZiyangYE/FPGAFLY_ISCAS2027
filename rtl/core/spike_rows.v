@@ -3,7 +3,7 @@ module spike_rows #(
     parameter LANES=42
 ) (
     clk, rst, start, pop_enable,
-    fire_valid, fire_row, fires, fire_ready,
+    fire_valid, fire_row, fires, fire_any, fire_ready,
     fire_pop, queued_fire_data, committed, fire_queue_peak
 );
     input clk;
@@ -13,6 +13,7 @@ module spike_rows #(
     input fire_valid;
     input [12:0] fire_row;
     input [LANES-1:0] fires;
+    input fire_any;
     output fire_ready;
     output fire_pop;
     output [LANES+11:0] queued_fire_data;
@@ -25,7 +26,7 @@ module spike_rows #(
     reg [6:0] fire_count = 0, fire_queue_peak = 0;
     wire fire_pop = pop_enable && fire_count != 0;
     wire trace_fire_valid = fire_valid && fire_ready;
-    wire fire_push = trace_fire_valid && (|fires);
+    wire fire_push = trace_fire_valid && fire_any;
     assign fire_ready = fire_count < 64;
     spike_queue #(
         .WIDTH(LANES + 12)

@@ -55,7 +55,7 @@ table.detail_table th.label {  min-width: 8%; width: 8%; }
 </tr>
 <tr>
 <td class="label">Design File</td>
-<td><a href="../build/thefly/impl/gwsynthesis/thefly.vg">build/thefly/impl/gwsynthesis/thefly.vg</a></td>
+<td><a href="../build/revc_02/impl/gwsynthesis/revc_02.vg">build/revc_02/impl/gwsynthesis/revc_02.vg</a></td>
 </tr>
 <tr>
 <td class="label">Physical Constraints File</td>
@@ -79,11 +79,11 @@ table.detail_table th.label {  min-width: 8%; width: 8%; }
 </tr>
 <tr>
 <td class="label">Device Version</td>
-<td>B</td>
+<td>C</td>
 </tr>
 <tr>
 <td class="label">Created Time</td>
-<td>Fri Sep 25 12:33:36 2026
+<td>Wed Oct 14 20:37:33 2026
 </td>
 </tr>
 <tr>
@@ -97,24 +97,24 @@ table.detail_table th.label {  min-width: 8%; width: 8%; }
 <tr>
 <td class="label">Place & Route Process</td>
 <td>Running placement:
-   Placement Phase 0: CPU time = 0h 0m 52s, Elapsed time = 0h 0m 52s
+   Placement Phase 0: CPU time = 0h 0m 35s, Elapsed time = 0h 0m 35s
    Placement Phase 1: CPU time = 0h 0m 2s, Elapsed time = 0h 0m 2s
-   Placement Phase 2: CPU time = 0h 3m 54s, Elapsed time = 0h 3m 54s
-   Placement Phase 3: CPU time = 0h 2m 11s, Elapsed time = 0h 2m 11s
-   Total Placement: CPU time = 0h 7m 0s, Elapsed time = 0h 7m 0s
+   Placement Phase 2: CPU time = 0h 2m 55s, Elapsed time = 0h 2m 55s
+   Placement Phase 3: CPU time = 0h 1m 56s, Elapsed time = 0h 1m 56s
+   Total Placement: CPU time = 0h 5m 28s, Elapsed time = 0h 5m 28s
 Running routing:
-   Routing Phase 0: CPU time = 0h 0m 0.753s, Elapsed time = 0h 0m 0.754s
-   Routing Phase 1: CPU time = 0h 4m 8s, Elapsed time = 0h 4m 8s
+   Routing Phase 0: CPU time = 0h 0m 0.708s, Elapsed time = 0h 0m 0.707s
+   Routing Phase 1: CPU time = 0h 4m 7s, Elapsed time = 0h 4m 7s
    Routing Phase 2: CPU time = 0h 0m 1s, Elapsed time = 0h 0m 1s
    Routing Phase 3: CPU time = 0h 0m 0s, Elapsed time = 0h 0m 0s
-   Total Routing: CPU time = 0h 4m 10s, Elapsed time = 0h 4m 10s
+   Total Routing: CPU time = 0h 4m 9s, Elapsed time = 0h 4m 9s
 Generate output files:
-   CPU time = 0h 0m 10s, Elapsed time = 0h 0m 10s
+   CPU time = 0h 0m 9s, Elapsed time = 0h 0m 9s
 </td>
 </tr>
 <tr>
 <td class="label">Total Time and Memory Usage</td>
-<td>CPU time = 0h 11m 19s, Elapsed time = 0h 11m 19s, Peak memory usage = 2194MB</td>
+<td>CPU time = 0h 9m 46s, Elapsed time = 0h 9m 46s, Peak memory usage = 2187MB</td>
 </tr>
 </table>
 <br/>
@@ -129,22 +129,22 @@ Generate output files:
 </tr>
 <tr>
 <td class="label">Logic</td>
-<td>44556/138240</td>
+<td>44482/138240</td>
 <td>33%</td>
 </tr>
 <tr>
 <td class="label">&nbsp &nbsp --LUT,ALU,ROM16</td>
-<td>44556(39189 LUT, 5367 ALU, 0 ROM16)</td>
+<td>44410(39035 LUT, 5375 ALU, 0 ROM16)</td>
 <td>-</td>
 </tr>
 <tr>
 <td class="label">&nbsp &nbsp --SSRAM(RAM16)</td>
-<td>0</td>
+<td>12</td>
 <td>-</td>
 </tr>
 <tr>
 <td class="label">Register</td>
-<td>49140/139140</td>
+<td>48931/139140</td>
 <td>36%</td>
 </tr>
 <tr>
@@ -154,7 +154,7 @@ Generate output files:
 </tr>
 <tr>
 <td class="label">&nbsp &nbsp --Logic Register as FF</td>
-<td>49140/138240</td>
+<td>48931/138240</td>
 <td>36%</td>
 </tr>
 <tr>
@@ -169,7 +169,7 @@ Generate output files:
 </tr>
 <tr>
 <td class="label">CLS</td>
-<td>44469/69120</td>
+<td>44308/69120</td>
 <td>65%</td>
 </tr>
 <tr>
@@ -262,8 +262,8 @@ Generate output files:
 </tr>
 <tr>
 <td class="label">LW</td>
-<td>4/8</td>
-<td>50%</td>
+<td>6/8</td>
+<td>75%</td>
 </tr>
 <tr>
 <td class="label">GCLK_PIN</td>
@@ -312,7 +312,7 @@ Generate output files:
 <tr>
 <td class="label">host/transport/jtck</td>
 <td>PRIMARY</td>
-<td> PBR1 PBR2</td>
+<td> PBR2</td>
 </tr>
 <tr>
 <td class="label">memory/reference_clk</td>
@@ -326,6 +326,16 @@ Generate output files:
 </tr>
 <tr>
 <td class="label">core/n3505_3</td>
+<td>LW</td>
+<td> -</td>
+</tr>
+<tr>
+<td class="label">core/retina/n65_5</td>
+<td>LW</td>
+<td> -</td>
+</tr>
+<tr>
+<td class="label">core/sampler/n1518_4</td>
 <td>LW</td>
 <td> -</td>
 </tr>

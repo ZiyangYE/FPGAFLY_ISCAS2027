@@ -110,6 +110,7 @@ module frame_engine #(
     wire [LANES*18-1:0] drives;
     wire fire_valid, fire_ready, fire_buffer_ready, fire_pop_enable, fire_pop;
     wire [LANES-1:0] fires;
+    wire fire_any;
     wire [LANES+11:0] queued_fire_data;
     wire [6:0] fire_queue_peak;
     wire edge_active, edge_ready, edge_take, event_valid, event_ready, event_done;
@@ -165,7 +166,7 @@ module frame_engine #(
     spike_rows #(.LANES(LANES)) rows (
         .clk(clk), .rst(rst || clear_frame), .start(dense_start), .pop_enable(fire_pop_enable),
         .fire_valid(fire_valid && phase == 1 && !failed), .fire_row(fire_row), .fires(fires),
-        .fire_ready(fire_buffer_ready), .fire_pop(fire_pop), .queued_fire_data(queued_fire_data),
+        .fire_any(fire_any), .fire_ready(fire_buffer_ready), .fire_pop(fire_pop), .queued_fire_data(queued_fire_data),
         .committed(committed), .fire_queue_peak(fire_queue_peak)
     );
     assign fire_ready = phase == 1 && !failed && fire_buffer_ready;
@@ -186,7 +187,7 @@ module frame_engine #(
         .raw_read(sample_read), .raw_write(warm_write), .raw_address(warm_write ? warm_address : sample_row),
         .raw_data(warm_data), .read_data(raw_result),
         .dense_valid(dense_valid), .dense_ready(dense_ready), .dense_row(generate_row), .dense_drive(drives),
-        .fire_valid(fire_valid), .fire_ready(fire_ready), .fire_row(fire_row), .fire(fires),
+        .fire_valid(fire_valid), .fire_ready(fire_ready), .fire_row(fire_row), .fire(fires), .fire_any(fire_any),
         .dense_failed(dense_failed),
         .event_valid(event_valid && edge_active), .event_ready(event_ready), .event_row(event_row),
         .event_lane(event_lane), .event_weight(event_weight), .event_done(event_done),

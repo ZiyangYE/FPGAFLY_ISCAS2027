@@ -11,20 +11,22 @@ The FPGA converts pixel brightness into spike density encoding.
 Black produces no spikes, while white produces up to 100 spikes over 1,000 time steps (0.1 ms per step), and classification is performed via a linear readout of the total spike counts.
 
 On the 10,000-image MNIST test set, the first window after warm-up achieves 86.91% accuracy (8,691 / 10,000).
-The core runs at 80 MHz and DDR3 at 320 MHz. The implementation uses 270 BSRAMs, 39,189 LUTs, and 49,140 registers.
+The core runs at 80 MHz and DDR3 at 320 MHz. The implementation uses 270 BSRAMs, 39,035 LUTs, and 48,931 registers.
 
 ### 1. Hardware and software
 
 | Item | Configuration |
 | --- | --- |
 | Board | Sipeed Tang Mega 138K Pro, with onboard DDR3 and JTAG |
-| FPGA | GW5AST-LV138FPG676AC1/I0, Rev B |
+| FPGA | GW5AST-LV138FPG676AC1/I0, Rev C |
 | Build IDE | Gowin V1.9.12.03 x64 (build 86715) |
 | Programmer | Gowin Programmer V1.9.12.02 SP2 x64 (build 2654) |
 | Host | Windows x64, Python 3.14.4 (64-bit), FTDI D2XX driver |
 | Simulation | WSL Ubuntu 22.04, Python 3.10.12, Verilator 4.038, C++17 compiler, make |
 
-This branch targets the Rev B Tang Mega 138K Pro board. Recently shipped boards appear to be mostly Rev C. If you are using a Rev C board, please switch to the `revC` branch. Connect the board's JTAG USB port to the Windows host. The DDR IP and pin constraints are included in the repository.
+This branch targets the Rev C Tang Mega 138K Pro board. If you are using a Rev B board, please switch to the `main` branch. Connect the board's JTAG USB port to the Windows host. The DDR IP and pin constraints are included in the repository.
+
+This branch includes minor RTL changes to address timing issues caused by the device revision change.
 
 ### 2. Get the project and data
 
@@ -39,7 +41,7 @@ This restores the packaged data and firmware into the workspace:
 - `data/model/`: connection graph, descriptors, readout weights, and spike mapping
 - `data/reference/`: shared initial states and queues, six-frame references, and continuous-window references
 - `data/input.bin`, `data/test_labels.u8`, `data/test_scores.i64`: preprocessed inputs and first-window accuracy reference
-- `build/thefly/`: restored bitstream, synthesis netlist, and copies of the native synthesis/P&R/timing reports
+- `build/revc_02/`: restored bitstream, synthesis netlist, and copies of the native synthesis/P&R/timing reports
 
 The prebuilt bitstream and netlist archive is stored at `firmware/bitstream.zip`. Final native reports are provided in `reports/`; restoration copies them to the corresponding build directories.
 
@@ -113,7 +115,7 @@ Note that `--cable-index` specifies the cable type in your Programmer version ra
 ```powershell
 $serial = "REPLACE_WITH_YOUR_INTERFACE_A_SERIAL"
 $cableIndex = Read-Host "Enter the cable-type index from your Programmer"
-$bitstream = "build/thefly/impl/pnr/thefly.fs"
+$bitstream = "build/revc_02/impl/pnr/revc_02.fs"
 # To use your source build from step 4:
 # $bitstream = "build/mnist16/impl/pnr/mnist16.fs"
 python -B tools/board.py accept --bitstream "$bitstream" --serial "$serial" --programmer "$programmer" --cable-index "$cableIndex" --reports-dir results/board_acceptance --state-samples 256
@@ -178,20 +180,22 @@ FPGA 将像素亮度转换为脉冲密度编码。
 纯黑不发脉冲，纯白在 1,000 个时间步（每步 0.1 ms）内最多产生 100 个脉冲，最后通过对总脉冲计数进行线性读出来完成分类。
 
 在 10,000 张 MNIST 测试集上，模型预热后首个窗口的准确率为 86.91%（8,691 / 10,000）。
-内核时钟为 80 MHz，DDR3 时钟为 320 MHz。实现使用了 270 个 BSRAM、39,189 个 LUT 和 49,140 个寄存器。
+内核时钟为 80 MHz，DDR3 时钟为 320 MHz。实现使用了 270 个 BSRAM、39,035 个 LUT 和 48,931 个寄存器。
 
 ### 1. 硬件与软件
 
 | 项目 | 配置 |
 | --- | --- |
 | 开发板 | Sipeed Tang Mega 138K Pro（板载 DDR3 和 JTAG） |
-| FPGA | GW5AST-LV138FPG676AC1/I0，Rev B |
+| FPGA | GW5AST-LV138FPG676AC1/I0，Rev C |
 | 构建 IDE | Gowin V1.9.12.03 x64（build 86715） |
 | 烧录器 | Gowin Programmer V1.9.12.02 SP2 x64（build 2654） |
 | 主机 | Windows x64、Python 3.14.4（64 位）、FTDI D2XX 驱动 |
 | 仿真 | WSL Ubuntu 22.04、Python 3.10.12、Verilator 4.038、C++17 编译器、make |
 
-当前分支对应 Rev B 的 Tang Mega 138K Pro 开发板。近期发货的板卡似乎都是 Rev C，如果使用 Rev C 的板卡，请切换至 `revC` 分支。将板卡的 JTAG USB 接口连接至 Windows 主机即可。仓库已包含所需的 DDR IP 和引脚约束。
+当前分支对应 Rev C 的 Tang Mega 138K Pro 开发板。如果使用 Rev B 的板卡，请切换至 `main` 分支。将板卡的 JTAG USB 接口连接至 Windows 主机即可。仓库已包含所需的 DDR IP 和引脚约束。
+
+针对器件版本变化带来的时序问题，本分支对 RTL 做了小幅修改。
 
 ### 2. 获取项目与数据
 
@@ -206,7 +210,7 @@ python -B tools/data.py restore
 - `data/model/`：连接图、描述符、读出权重和脉冲映射
 - `data/reference/`：共用初始状态与队列、六帧参考结果和连续窗口参考结果
 - `data/input.bin`、`data/test_labels.u8`、`data/test_scores.i64`：预处理输入、测试标签及首个窗口的分类参考分数
-- `build/thefly/`：恢复后的 bitstream、综合网表及综合/布局布线/时序报告副本
+- `build/revc_02/`：恢复后的 bitstream、综合网表及综合/布局布线/时序报告副本
 
 `firmware/bitstream.zip` 是预构建 bitstream 和网表压缩包。最终原生报告随仓库保存在 `reports/` 中，恢复时复制到对应构建目录。
 
@@ -280,7 +284,7 @@ python -B tools/board.py adapters
 ```powershell
 $serial = "填写刚刚枚举得到的接口 A 序列号"
 $cableIndex = Read-Host "输入本机 Programmer 对应线缆类型的 cable-index"
-$bitstream = "build/thefly/impl/pnr/thefly.fs"
+$bitstream = "build/revc_02/impl/pnr/revc_02.fs"
 # 如需使用第 4 步自行构建的 bitstream：
 # $bitstream = "build/mnist16/impl/pnr/mnist16.fs"
 python -B tools/board.py accept --bitstream "$bitstream" --serial "$serial" --programmer "$programmer" --cable-index "$cableIndex" --reports-dir results/board_acceptance --state-samples 256
