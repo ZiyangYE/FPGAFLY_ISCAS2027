@@ -1,0 +1,9 @@
+# Keep source and artifact bytes unchanged on checkout.
+* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+data/data.zip* binary
+firmware/bitstream.zip* binary
+results/reference/board/*.log -whitespace
+# Leave the generated whitespace in vendor files alone.
+ip/ddr3/** -whitespace
+rtl/board/*pll.v -whitespace
+constraints/tang_mega_pro.cst -whitespace
